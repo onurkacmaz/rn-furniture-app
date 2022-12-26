@@ -14,12 +14,12 @@ const ItemComponent = (props) => {
     setIsFavorite(v.isFavorite)
   }, [])
   
-  const handleOpenItemDetail = (id) => {
-    navigation.navigate("ItemDetail", {id: id})
+  const handleOpenItemDetail = (item) => {
+    navigation.navigate("ItemDetail", {item: item})
   }
 
   return (
-    <TouchableOpacity style={styles.container} key={v.id} onPress={() => handleOpenItemDetail(v.id)}>
+    <TouchableOpacity style={styles.container} onPress={() => handleOpenItemDetail(v)}>
       <View style={{flexDirection:'row', flex:1}}>
         <Text style={{flex:4, fontWeight:'bold', fontSize:20}}>{v.price}</Text>
         <TouchableOpacity onPress={() => setIsFavorite(!isFavorite)}>
@@ -27,11 +27,11 @@ const ItemComponent = (props) => {
         </TouchableOpacity>
       </View>
       <View style={{marginTop:20, alignSelf:'center', flex:1}}>
-        <Image source={{uri: v.image, width:90, height:90}} width="100%" height="100%" />
+        <Image source={{uri: v.images[0].value, width:90, height:90}} width="100%" height="100%" />
       </View>
-      <Text style={{textAlign:'center', marginTop:10, fontSize:20, flex:1}}>{v.name}</Text>
+      <Text ellipsizeMode='tail' numberOfLines={1} style={{textAlign:'center', marginTop:10, fontSize:20, flex:1}}>{v.name}</Text>
       <View style={{padding:10, backgroundColor:'#fff', borderRadius:10, flex:0, marginTop:10}}>
-        <Text style={{textAlign:'center'}}>Rent for {v.additional.installment.value}</Text>
+        <Text ellipsizeMode='tail' numberOfLines={1} style={{textAlign:'center'}}>Rent for {v.additional.installment.value}</Text>
       </View>
     </TouchableOpacity>
   )

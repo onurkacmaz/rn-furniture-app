@@ -1,41 +1,34 @@
-export default [
-  {
-    id: 1,
-    name: 'Florance Chair',
-    categoryId: 1,
-    image: 'https://purepng.com/public/uploads/large/purepng.com-armchairarmchairarmchairsoffice-chairssofa-1701527920404xw33e.png',
-    isFavorite: true,
-    price: '$897',
+import { faker } from '@faker-js/faker';
+
+let products = [];
+
+for(let i = 0; i < 10; i++) {
+  var price = faker.commerce.price(0, 1000, 2)
+  let product = {
+    id: faker.datatype.uuid(),
+    name: faker.commerce.productName(),
+    categoryId: faker.datatype.uuid(),
+    isFavorite: faker.datatype.boolean(),
+    price: "$" + price,
+    priceWithoutCurrency: price,
+    totalQty: faker.datatype.number({min:0, max:10}),
     additional: {
       installment: {
-        value: '$45/mo'
-      }
-    }
-  },
-  {
-    id: 2,
-    name: 'Hewitt Chair',
-    categoryId: 1,
-    image: 'https://snipstock.com/assets/cdn/png/cab2fcf3111bbb2ecba52a5032c8a5ed.png',
-    isFavorite: false,
-    price: '$120',
-    additional: {
-      installment: {
-        value: '$35/mo'
-      }
-    }
-  },
-  {
-    id: 3,
-    name: 'Harper Swivel Chair',
-    categoryId: 1,
-    image: 'https://snipstock.com/assets/cdn/png/fccfe3b4cc250341daafcb9a4079cc87.png',
-    isFavorite: false,
-    price: '$500',
-    additional: {
-      installment: {
-        value: '$28/mo'
-      }
-    }
+        value: faker.commerce.price(0, 1000, 2, '$') + '/mo'
+      },
+      description: faker.commerce.productDescription()
+    },
+    images: []
   }
-]
+
+  for(let k = 0; k < 5; k++) {
+    product.images.push({
+      id: faker.datatype.uuid(),
+      value: faker.image.city(null, null, true)
+    })
+  }
+
+  products.push(product)
+}
+
+export default products

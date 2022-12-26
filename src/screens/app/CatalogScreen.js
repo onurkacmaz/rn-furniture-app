@@ -67,9 +67,9 @@ const CatalogScreen = () => {
           </View>
           <ScrollView contentInset={{right:30}} horizontal showsHorizontalScrollIndicator={false} style={styles.popularItems}>
             {
-              products.map((v) => {
+              products.slice(0,5).map((v, i) => {
                 return (
-                  <ItemComponent key={v.id} item={v}/>
+                  <ItemComponent key={i} item={v}/>
                 )
               })
             }
