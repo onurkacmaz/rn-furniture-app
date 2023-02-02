@@ -2,7 +2,6 @@ import { Text, Modal, StyleSheet, ScrollView, View, TouchableOpacity, TextInput 
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Cart from '../../utils/cart'
-import { useSelector } from 'react-redux';
 import BasketItem from '../../components/BasketItem';
 import { getShipmentPrice } from '../../store/static'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -11,7 +10,9 @@ import { useState } from 'react';
 import discountCodes from '../../store/discountCodes'
 
 const BasketScreen = ({route, navigation}) => {
-  const state = useSelector((state) => state) 
+  const cart = new Cart()
+  const items = cart.getItems()
+  const discount = cart.getDiscount()
   const [modalVisible, setModalVisible] = useState(false)
   const [discountCode, setDiscountCode] = useState(null)
 
@@ -65,7 +66,7 @@ const BasketScreen = ({route, navigation}) => {
         <Text style={styles.heading}>Checkout</Text>
         <ScrollView contentInset={{bottom:20}} showsVerticalScrollIndicator={true} style={{paddingHorizontal:20, flex:1}}>
           {
-            state.items.sort((a,b) => a.addedDate < b.addedDate).map((item, i) => {
+            items.sort((a,b) => a.addedDate < b.addedDate).map((item, i) => {
               return (
                 <BasketItem item={item} />
               )
@@ -83,32 +84,32 @@ const BasketScreen = ({route, navigation}) => {
             <Text style={[styles.summary.largeHeading, {fontSize:15}]}>{getShipmentPrice(true)}</Text>
           </View>
           {
-            state.discount ?
+            discount ?
             <View style={{flex:3, flexDirection:'row', justifyContent:'space-between'}}>
               <Text style={[styles.summary.smallHeading]}>Discount price</Text>
-              <Text style={[styles.summary.largeHeading, {fontSize:15}]}>{state.discount.plainText}</Text>
+              <Text style={[styles.summary.largeHeading, {fontSize:15}]}>{discount.plainText}</Text>
             </View>
             : null
           }
           <View style={{flex:3, flexDirection:'row', justifyContent:'space-between'}}>
             <Text style={[styles.summary.smallHeading, styles.summary.largeHeading]}>Sub Total</Text>
-            <Text style={[styles.summary.smallHeading, styles.summary.largeHeading]}>{new Cart(state).getTotal()}</Text>
+            <Text style={[styles.summary.smallHeading, styles.summary.largeHeading]}>{cart.getTotal()}</Text>
           </View>
         </View>
-        <View style={{flex:0.7, flexDirection:'row', paddingHorizontal:20}}>
+        <View style={{flex:0.8, flexDirection:'row', paddingHorizontal:20}}>
           <View style={{flex:1}}>
             {
-              state.discount ?
+              discount ?
               <TouchableOpacity style={[{backgroundColor:'#f00', flex:1, justifyContent:'center', alignItems:'center', borderRadius:100}]} onPress={() => handleRemoveDiscount()}>
                 <Icon name="gift" size={20} color="#fff" />
               </TouchableOpacity>
-              : 
-              <TouchableOpacity style={[{backgroundColor:'rgb(6,15,78)', flex:1, justifyContent:'center', alignItems:'center', borderRadius:100}]} onPress={() => handleOpenDiscountModal()}>
+              :
+              <TouchableOpacity disabled={items.length <= 0} style={[items.length > 0 ? {backgroundColor:'rgb(6,15,78)'} : {backgroundColor:'#ccc'}, {flex:1, justifyContent:'center', alignItems:'center', borderRadius:100}]} onPress={() => handleOpenDiscountModal()}>
                 <Icon name="gift" size={20} color="#fff" />
               </TouchableOpacity>
             }
           </View>
-          <TouchableOpacity disabled={state.items.length <= 0} style={[state.items.length <= 0 ? {backgroundColor:'#ccc'} : {backgroundColor:'rgb(6,15,78)'}, {marginLeft:20, flex:2, justifyContent:'center', borderRadius:100}]} onPress={() => handleOpenCheckoutScreen()}>
+          <TouchableOpacity disabled={items.length <= 0} style={[items.length <= 0 ? {backgroundColor:'#ccc'} : {backgroundColor:'rgb(6,15,78)'}, {marginLeft:20, flex:2, justifyContent:'center', borderRadius:100}]} onPress={() => handleOpenCheckoutScreen()}>
             <Text style={{color:'#fff', fontWeight:'bold', fontSize:20, textAlign:'center'}}>Checkout</Text>
           </TouchableOpacity>
         </View>

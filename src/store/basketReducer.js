@@ -78,6 +78,10 @@ function basketReducer(state = {items: []}, action) {
       delete state.discount
       
       return {...state, uuid: faker.datatype.uuid()}
+    case 'destroy':
+      state.items = []
+      delete state.discount 
+      return {...state, uuid: faker.datatype.uuid()}
     default:
       return state
   }

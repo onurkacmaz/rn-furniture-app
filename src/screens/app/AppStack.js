@@ -5,6 +5,7 @@ import ItemDetailScreen from './ItemDetailScreen'
 import CatalogScreen from './CatalogScreen'
 import BasketScreen from './BasketScreen'
 import CheckoutScreen from './CheckoutScreen'
+import PaymentSuccessScreen from './PaymentSuccessScreen'
 import AccountScreen from './AccountScreen'
 import { StyleSheet, Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -106,6 +107,7 @@ const AppStack = () => {
         <Stack.Screen name="Tab" options={{headerShown:false}} component={Tabs} />
         <Stack.Screen name="ItemDetail" options={{headerShown:false}} component={ItemDetailScreen} />
         <Stack.Screen name="Checkout" options={{headerShown:false}} component={CheckoutScreen} />
+        <Stack.Screen name="PaymentSuccess" options={{headerShown:false}} component={PaymentSuccessScreen} />
       </Stack.Navigator>
     </OverlayContext.Provider>
     </Provider>

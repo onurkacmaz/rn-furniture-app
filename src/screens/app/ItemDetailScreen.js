@@ -39,6 +39,7 @@ const ItemDetailScreen = ({route, navigation}) => {
   const handleAddItemToCart = () => {
     try {
       basketReducer.dispatch({type: 'add', item: item, qty: qty})
+      Alert.alert("Ürün sepete eklendi.")
     }catch(e) {
       Alert.alert(e.message)
     }

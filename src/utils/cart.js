@@ -1,10 +1,20 @@
 import { getShipmentPrice } from "../store/static"
+import basket from '../store/basketReducer'
+import { useSelector } from "react-redux"
 
 class Cart {
-  constructor(cart = []) {
-    this.cart = cart
+  constructor() {
+    this.cart = useSelector((state) => state)
     this.total = 0
     this.prepareTotal()
+  }
+
+  getItems() {
+    return this.cart.items
+  }
+
+  getDiscount() {
+    return this.cart.discount
   }
 
   prepareTotal() {
@@ -24,6 +34,10 @@ class Cart {
     }
 
     this.total += getShipmentPrice()
+  }
+
+  reset() {
+    basket.dispatch({type: 'destroy'})
   }
 
   getTotal () {
