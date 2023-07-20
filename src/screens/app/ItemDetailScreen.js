@@ -72,8 +72,8 @@ const ItemDetailScreen = ({route, navigation}) => {
           </View>
           <View style={{flexDirection:'row', alignContent:'space-between', flex:0, paddingTop:10, justifyContent:'center', alignSelf:'center', alignItems:'center'}}>
             <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
-              <Text style={{fontWeight:'bold', fontSize:25, color:'rgb(255,90,98)'}}>{item?.price?.slice(0, 1)}</Text>
-              <Text style={{fontWeight:'bold', fontSize:50, color:'rgb(255,90,98)'}}>{item?.price?.slice(1, item.price.length)}</Text>
+              <Text style={{fontWeight:'bold', fontSize:25, color:'rgb(255,90,98)'}}>$</Text>
+              <Text style={{fontWeight:'bold', fontSize:50, color:'rgb(255,90,98)'}}>{item?.price}</Text>
             </View>
             <View style={{flex:1, justifyContent:'flex-end', flexDirection:'row'}}>
               <TouchableOpacity onPress={() => handleDecreaseQty()} style={{backgroundColor:'#fff', padding:7, borderRadius:5}}>

@@ -28,12 +28,12 @@ const BasketItem = (props) => {
   return (
     <TouchableOpacity key={item.id} onPress={() => handleOpenItemDetail(item)} style={{flexDirection:'row', justifyContent:'flex-start', marginTop:20}}>
       <View style={{flex:0}}>
-        <Image source={{uri: item?.images[0].value, width:90, height:80}} resizeMode="cover" width="100%" height="100%" />
+        <Image source={{uri: item?.images[0]?.value, width:90, height:80}} resizeMode="cover" width="100%" height="100%" />
       </View>
       <View style={{flex:2, marginLeft:20, flexDirection:'column'}}>
         <Text ellipsizeMode='tail' numberOfLines={1} style={{fontWeight:'500', fontSize:17, flex:0.2}}>{item?.name}</Text>
         <Text style={{fontWeight:'700', fontSize:14, flex:1}}>{item?.price}</Text>
-        <Text style={{fontWeight:'bold', fontSize:20, flex:0,}}>{item?.additional.installment.value}</Text>
+        <Text style={{fontWeight:'bold', fontSize:20, flex:0,}}>{item?.additional?.installment.value}</Text>
       </View>
       <View style={{flex:0, alignItems:'flex-end', flexDirection:'row'}}>
           <TouchableOpacity onPress={() => handleDecrease(item)} style={{backgroundColor:'#fff', padding:7, borderRadius:5}}>

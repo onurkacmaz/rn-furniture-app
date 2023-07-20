@@ -1,36 +1,57 @@
 import { View, Image, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, RefreshControl, SafeAreaView } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
-import categories from '../../store/categories'
-import products from '../../store/products'
+import React, { useEffect, useState } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ItemComponent from '../../components/ItemComponent';
+import CategoryApi from './../../store/CategoryApi'
+import ProductApi from './../../store/ProductApi'
 
-const CatalogScreen = () => {
+const CatalogScreen = ({route, navigation}) => {
 
-  const [selectCategoryId, setSelectedCategoryId] = useState(null)
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null)
+
+  const [categories, setCategories] = useState([])
+  const [products, setProducts] = useState([])
+  const [refreshing, setRefreshing] = useState(false)
 
   const handleSelectCategory = (id) => {
     setSelectedCategoryId(id)
+    getProducts({categoryId: id})
   }
 
-  useEffect(() => {
-    setSelectedCategoryId(categories[0].id)
+  const setSearchKeyword = (text) => {
+    getProducts({
+      categoryId: selectedCategoryId,
+      q: text
+    })
+  }
+
+  useEffect(() => { 
+    getCategories({parent:""})
+    getProducts()
   }, [])
 
   const handleOpenPopularProducts = () => {
-
+    navigation.navigate("ViewAllItems", {categoryId: selectedCategoryId})
   }
-  
-  const wait = (timeout) => {
-    return new Promise(resolve => setTimeout(resolve, timeout));
-  }
-  
-  const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = useCallback(() => {
+  const getCategories = (data) => {
+    CategoryApi.get(data).then(r => {
+      setCategories(r.data.data)
+      setSelectedCategoryId(r.data.data[0].id)
+    })
+  }
+
+  const getProducts = (data = {}) => {
     setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
+    if(!data.categoryId) {
+      data.categoryId = selectedCategoryId
+    }
+    ProductApi.get(data).then(r => {
+      setProducts(r.data.data)
+    }).finally(() => {
+      setRefreshing(false)
+    })
+  }
 
   return (
     <SafeAreaView style={{flex:1, backgroundColor:'#fff'}}>
@@ -41,8 +62,8 @@ const CatalogScreen = () => {
             {
               categories.map((v, i) => {
                 return (
-                  <TouchableOpacity onPress={() => handleSelectCategory(v.id)} key={v.id} style={[styles.categoryBage, selectCategoryId == v.id ? styles.categoryBageActive : '']}>
-                    <Text style={[styles.categoryBageText, selectCategoryId == v.id ? styles.categoryBageTextActive : '']}>{v.name}</Text>
+                  <TouchableOpacity onPress={() => handleSelectCategory(v.id)} key={v.id} style={[styles.categoryBage, selectedCategoryId == v.id ? styles.categoryBageActive : '']}>
+                    <Text style={[styles.categoryBageText, selectedCategoryId == v.id ? styles.categoryBageTextActive : '']}>{v.name}</Text>
                   </TouchableOpacity>
                 )
               })
@@ -50,14 +71,14 @@ const CatalogScreen = () => {
           </ScrollView>
         </View>
         <View style={styles.searchContainer}>
-          <TextInput placeholder='Text here...' keyboardType='default' style={styles.searchInput} />
+          <TextInput onChangeText={(text) => setSearchKeyword(text)} placeholder='Text here...' keyboardType='default' style={styles.searchInput} />
           <TouchableOpacity style={styles.searchFilterButton}>
             <Icon name="align-center" size={20} color="rgb(82,115,149)" />
           </TouchableOpacity>
         </View>
         <ScrollView refreshControl={<RefreshControl
               refreshing={refreshing}
-              onRefresh={onRefresh}
+              onRefresh={getProducts}
             />} contentInset={{bottom:50}} style={styles.popularItemsContainer}>
           <View style={[styles.popularItemsHeading]}>
             <Text style={[styles.heading, styles.thin, {flex:4, marginTop:0}]}>New arrival of chairs</Text>

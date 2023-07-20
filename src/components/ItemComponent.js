@@ -4,19 +4,21 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 
 const ItemComponent = (props) => {
-  const v = props.item;
-  
-  const [isFavorite, setIsFavorite] = useState(false);
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    setIsFavorite(v.isFavorite)
-  }, [])
+  const [v, setV] = useState(props.item);
+  
+  const [isFavorite, setIsFavorite] = useState(false);
   
   const handleOpenItemDetail = (item) => {
     navigation.navigate("ItemDetail", {item: item})
   }
+
+  useEffect(() => {
+    setV(props.item)
+    setIsFavorite(v.isFavorite)
+  }, [])
 
   return (
     <TouchableOpacity style={styles.container} onPress={() => handleOpenItemDetail(v)}>
@@ -27,11 +29,11 @@ const ItemComponent = (props) => {
         </TouchableOpacity>
       </View>
       <View style={{marginTop:20, alignSelf:'center', flex:1}}>
-        <Image source={{uri: v.images[0].value, width:90, height:90}} width="100%" height="100%" />
+        <Image source={{uri: v.images[0]?.path, width:90, height:90}} width="100%" height="100%" />
       </View>
       <Text ellipsizeMode='tail' numberOfLines={1} style={{textAlign:'center', marginTop:10, fontSize:20, flex:1}}>{v.name}</Text>
       <View style={{padding:10, backgroundColor:'#fff', borderRadius:10, flex:0, marginTop:10}}>
-        <Text ellipsizeMode='tail' numberOfLines={1} style={{textAlign:'center'}}>Rent for {v.additional.installment.value}</Text>
+        <Text ellipsizeMode='tail' numberOfLines={1} style={{textAlign:'center'}}>Rent for {v.additionalItems?.installment?.value}</Text>
       </View>
     </TouchableOpacity>
   )

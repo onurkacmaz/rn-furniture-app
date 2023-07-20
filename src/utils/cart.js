@@ -19,7 +19,7 @@ class Cart {
 
   prepareTotal() {
     this.total = this.cart.items.reduce((a, b) => {
-      return parseFloat(a) + (parseFloat(b.priceWithoutCurrency) * b.qty)
+      return parseFloat(a) + (parseFloat(b.price) * b.qty)
     }, 0)
 
     if(this.cart.discount) {
