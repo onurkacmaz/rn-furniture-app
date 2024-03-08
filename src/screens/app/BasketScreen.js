@@ -68,7 +68,7 @@ const BasketScreen = ({route, navigation}) => {
           {
             items.sort((a,b) => a.addedDate < b.addedDate).map((item, i) => {
               return (
-                <BasketItem item={item} />
+                <BasketItem key={i} item={item} />
               )
             })
           }
